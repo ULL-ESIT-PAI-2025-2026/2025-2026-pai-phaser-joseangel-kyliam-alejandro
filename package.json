@@ -1,0 +1,28 @@
+{
+  "name": "phaser-25-26",
+  "version": "1.0.0",
+  "description": "Presentacion Phaser 25 26",
+  "homepage": "https://github.com/ULL-ESIT-PAI-2025-2026/2025-2026-pai-phaser-grupo-phaser-25-26#readme",
+  "bugs": {
+    "url": "https://github.com/ULL-ESIT-PAI-2025-2026/2025-2026-pai-phaser-grupo-phaser-25-26/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ULL-ESIT-PAI-2025-2026/2025-2026-pai-phaser-grupo-phaser-25-26.git"
+  },
+  "license": "MIT",
+  "author": "Jose Angel Portillo Garcia, Alejandro Feo Martin, Kyliam Gabriel Chinea Salcedo",
+  "type": "commonjs",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "phaser": "^4.0.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10"
+  }
+}

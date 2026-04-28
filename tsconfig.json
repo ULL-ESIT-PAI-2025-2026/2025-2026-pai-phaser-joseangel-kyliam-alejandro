@@ -1,0 +1,38 @@
+{
+  "display": "Configuration for Phaser Presentation",
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "es2022",
+    "skipLibCheck": true,
+    "allowJs": true,
+    "rootDir": "./",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "declaration": true,
+    "alwaysStrict": true,
+    "strict": true,
+    "lib": ["ESNext", "dom"],
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": false,
+    "types": ["vite/client"],
+    "noUnusedParameters": false
+  },
+  "exclude": [
+        "node_modules",
+        "build",
+        "lib",
+        "test",
+        "public",
+        "babel.config.js",
+        "jest.config.js",
+        "dist",
+        "doc",
+        "read-JSON-app",
+        "vite.config.ts",
+        "scripts",
+        "bouncing-ball-animation-example"
+  ]
+}
