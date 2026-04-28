@@ -1,3 +1,5 @@
 # Bibliography
+Links for the different references used in the project
 
-Include in this directory all references and additional material used in your project
+- [Phaser Repo](https://github.com/phaserjs/phaser/)
+
