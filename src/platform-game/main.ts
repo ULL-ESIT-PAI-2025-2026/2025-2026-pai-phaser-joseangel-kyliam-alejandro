@@ -11,7 +11,7 @@
  * @desc Entry point of the Phaser game application.
  */
 
-import {StartGame} from './game/main';
+import {StartGame} from './game/game';
 
 /**
  * @desc Initialises and starts the game inside the given container element.
