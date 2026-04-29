@@ -11,7 +11,7 @@
  * @desc Manages all sound effects and background music for the game.
  */
 
-import * as Phaser from 'phaser';
+import Phaser from 'phaser';
 
 const SOUND_PATH: string = 'assets/sound/';
 
