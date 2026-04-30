@@ -1,58 +1,85 @@
+/**
+ * Universidad de La Laguna
+ * Escuela Superior de Ingeniería y Tecnología
+ * Grado en Ingeniería Informática
+ * Programación de Aplicaciones Interactivas
+ *
+ * @author Jose Angel Portillo Garcia
+ * @author Alejandro Feo Martin
+ * @author Kyliam Gabriel Chinea Salcedo
+ * @since Apr 29 2026
+ * @desc Manages the User Interface scene, displaying metrics and handling UI interactions.
+ */
+
 import * as Phaser from 'phaser';
 
+/**
+ * @classdesc UI Scene responsible for overlaying game metrics and interactive controls.
+ */
 export default class UIScene extends Phaser.Scene {
-  // Definimos las propiedades con sus tipos de Phaser
-  private counter: number = 0;
-  private text!: Phaser.GameObjects.Text;
-  private button!: Phaser.GameObjects.Text;
+  /** * @desc Tracks the number of collisions detected. 
+   */
+  private collisionCounter: number = 0;
+
+  /** * @desc Visual text representation of the collision counter. 
+   */
+  private counterText!: Phaser.GameObjects.Text;
+
+  /** * @desc Interactive button to toggle the visibility of the counter. 
+   */
+  private toggleVisibilityButton!: Phaser.GameObjects.Text;
+
+  /** * @desc Flag determining if the counter is currently visible on screen. 
+   */
   private isCounterVisible: boolean = true;
 
+  /**
+   * @desc Instantiates the UI Scene with its unique Phaser key.
+   */
   constructor() {
     super('UIScene');
   }
 
-  create() {
-    this.counter = 0;
+  /**
+   * @desc Initializes all UI elements, registers interactivity, and sets up event listeners.
+   */
+  create(): void {
+    this.collisionCounter = 0;
 
-    // 1. Texto contador
-    this.text = this.add.text(10, 10, 'Choques: 0', {
+    this.counterText = this.add.text(10, 10, 'Choques: 0', {
       fontSize: '24px',
       color: '#ffffff'
     });
 
-    // 2. Botón ON/OFF
-    this.button = this.add.text(10, 50, 'Toggle contador', {
+    this.toggleVisibilityButton = this.add.text(10, 50, 'Toggle contador', {
       fontSize: '20px',
       backgroundColor: '#000',
       padding: { x: 10, y: 5 }
-    })
-    .setInteractive({ useHandCursor: true });
+    }).setInteractive({ useHandCursor: true });
 
-    // Lógica del botón usando el flag de visibilidad
-    this.button.on('pointerdown', () => {
+    this.toggleVisibilityButton.on('pointerdown', () => {
       this.isCounterVisible = !this.isCounterVisible;
-      this.text.setVisible(this.isCounterVisible);
+      this.counterText.setVisible(this.isCounterVisible);
     });
 
-    // 3. Comunicación entre escenas (Escuchar eventos de GameScene)
-    // Buscamos la referencia de la escena de juego
-    const gameScene = this.scene.get('GameScene');
+    const gameScene: Phaser.Scene = this.scene.get('GameScene');
     
     if (gameScene) {
-      // Escuchamos el evento 'collision' que emite GameScene
-      gameScene.events.on('collision', this.increment, this);
+      gameScene.events.on('collision', this.incrementCollisionCounter, this);
     }
 
-    // Limpieza: Si la escena se detiene, dejamos de escuchar para evitar fugas de memoria
     this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
       if (gameScene) {
-        gameScene.events.off('collision', this.increment, this);
+        gameScene.events.off('collision', this.incrementCollisionCounter, this);
       }
     });
   }
 
-  private increment() {
-    this.counter++;
-    this.text.setText(`Choques: ${this.counter}`);
+  /**
+   * @desc Increases the collision counter by one and updates the UI text display.
+   */
+  private incrementCollisionCounter(): void {
+    this.collisionCounter++;
+    this.counterText.setText(`Choques: ${this.collisionCounter}`);
   }
 }
