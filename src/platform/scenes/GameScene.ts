@@ -16,6 +16,8 @@ export default class GameScene extends Phaser.Scene {
   lavaStatic!: Phaser.Physics.Arcade.StaticGroup;
   lavaFallingGroup!: Phaser.Physics.Arcade.Group; 
   exits!: Phaser.Physics.Arcade.StaticGroup;
+  jumpSound!: Phaser.Sound.BaseSound;
+  coinSound!: Phaser.Sound.BaseSound;
 
   // Temporizador interno de la escena
   private gameTimer?: Phaser.Time.TimerEvent;
@@ -29,7 +31,8 @@ export default class GameScene extends Phaser.Scene {
     if (!this.scene.isActive('UIScene')) {
       this.scene.launch('UIScene');
     }
-
+    this.jumpSound = this.sound.add('jump_sfx');
+    this.coinSound = this.sound.add('coin_sfx');
     // 2. Construcción del nivel
     const levelData = LEVELS[gameState.currentLevelIndex];
     const levelObjects = LevelBuilder.build(this, levelData);

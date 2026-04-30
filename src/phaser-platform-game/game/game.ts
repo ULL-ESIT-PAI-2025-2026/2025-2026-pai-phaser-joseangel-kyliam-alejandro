@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import GameScene from './scenes/GameScene';
 import UIScene from './scenes/UIScene';
 import PauseScene from './scenes/PauseScene';
+import MusicScene from './scenes/music_scene';
 
 export function StartGame(containerId: string) {
 
@@ -23,7 +24,7 @@ export function StartGame(containerId: string) {
       }
     },
 
-    scene: [GameScene, UIScene, PauseScene]
+    scene: [GameScene, UIScene, PauseScene, MusicScene]
   };
 
   new Phaser.Game(config);

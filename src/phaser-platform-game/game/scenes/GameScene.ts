@@ -4,20 +4,21 @@ import { LevelBuilder } from '../builders/LevelBuilder';
 import { gameState } from '../state/GameState';
 import eventCenter from '../events/EventCenter';
 
+// NUEVO: Importamos la clase MusicScene para poder tiparla
+import MusicScene from  './music_scene'; 
+
 import Player from '../gameobjects/Player';
 import LavaFalling from '../gameobjects/LavaFalling';
 
 export default class GameScene extends Phaser.Scene {
   player!: Player;
   
-  // Grupos de físicas devueltos por el LevelBuilder
   walls!: Phaser.Physics.Arcade.StaticGroup;
   coins!: Phaser.Physics.Arcade.StaticGroup;
   lavaStatic!: Phaser.Physics.Arcade.StaticGroup;
   lavaFallingGroup!: Phaser.Physics.Arcade.Group; 
   exits!: Phaser.Physics.Arcade.StaticGroup;
 
-  // Temporizador interno de la escena
   private gameTimer?: Phaser.Time.TimerEvent;
 
   constructor() {
@@ -33,25 +34,34 @@ export default class GameScene extends Phaser.Scene {
       endFrame: 2
     });
     this.load.spritesheet('player-sprite', `${repoBase}assets/img/player.png`, {
-    frameWidth: 24,
-    frameHeight: 30
-  });
+      frameWidth: 24,
+      frameHeight: 30
+    });
     this.load.on('filecomplete-spritesheet-main-sprites', () => {
       console.log('✅ Spritesheet cargado con éxito usando la ruta base de Vite');
     });
   }
 
+  // NUEVO: Helper para obtener el director de orquesta fácilmente y tipado
+  private get audioManager(): MusicScene {
+    return this.scene.get('MusicScene') as MusicScene;
+  }
+
   create() {
-    // 1. Lanzamos la Interfaz de Usuario en paralelo si no está activa
+    // 1. Lanzamos la Interfaz de Usuario y la Música en paralelo
     if (!this.scene.isActive('UIScene')) {
       this.scene.launch('UIScene');
+    }
+    
+    // NUEVO: Nos aseguramos de que el director de orquesta esté trabajando
+    if (!this.scene.isActive('MusicScene')) {
+      this.scene.launch('MusicScene');
     }
 
     // 2. Construcción del nivel
     const levelData = LEVELS[gameState.currentLevelIndex];
     const levelObjects = LevelBuilder.build(this, levelData);
 
-    // Asignamos las referencias
     this.player = levelObjects.player;
     this.walls = levelObjects.walls;
     this.coins = levelObjects.coins;
@@ -65,7 +75,7 @@ export default class GameScene extends Phaser.Scene {
       this.scene.launch('PauseScene');
     });
 
-    // 4. Temporizador de la partida (se pausa automáticamente con this.scene.pause())
+    // 4. Temporizador de la partida
     this.gameTimer = this.time.addEvent({
       delay: 1000,
       callback: () => {
@@ -87,24 +97,36 @@ export default class GameScene extends Phaser.Scene {
 
   createCollisions() {
     this.physics.add.collider(this.player, this.walls);
+    
     this.physics.add.overlap(this.lavaFallingGroup, this.walls, (lavaObj) => {
       const lava = lavaObj as LavaFalling;
       lava.deactivate(); 
     });
+    
     this.physics.add.overlap(this.player, this.coins, (_, coin) => {
       coin.destroy();
       gameState.addCoin(); 
+      // NUEVO: Reproducimos el sonido al tocar la moneda
+      this.audioManager.playCoinSound();
     });
+    
     this.physics.add.overlap(this.player, this.lavaStatic, () => this.handleDeath());
     this.physics.add.overlap(this.player, this.lavaFallingGroup, () => this.handleDeath()); 
     this.physics.add.overlap(this.player, this.exits, () => this.handleLevelComplete());
   }
 
   handleDeath() {
+    // NUEVO: Reproducimos el sonido de muerte
+    this.audioManager.playDeathSound();
+    
     gameState.resetLevel();
 
     if (gameState.isGameOver()) {
       console.log('Game Over');
+      // NUEVO: Sonido de Game Over si se acaban las vidas
+      this.audioManager.stopBackgroundMusic();
+      this.audioManager.playGameOverSound();
+      
       gameState.resetGame();
       this.scene.restart();
     } else {
@@ -115,12 +137,17 @@ export default class GameScene extends Phaser.Scene {
   handleLevelComplete() {
     gameState.nextLevel();
 
+    // NUEVO: Detenemos la música de fondo y tocamos la fanfarria
+    this.audioManager.stopBackgroundMusic();
+
     if (gameState.currentLevelIndex < LEVELS.length) {
-      this.scene.restart(); // Carga el siguiente nivel
+      this.audioManager.playStageClearSound();
+      this.scene.restart(); 
     } else {
       console.log('¡Juego completado!');
+      this.audioManager.playWorldClearSound();
       gameState.resetGame();
-      this.scene.restart(); // Vuelve al inicio
+      this.scene.restart(); 
     }
   }
 }

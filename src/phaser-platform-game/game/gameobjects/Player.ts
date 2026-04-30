@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import MusicScene from '../scenes/music_scene';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -39,6 +40,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     if (!scene.anims.exists('jump')) {
+
       scene.anims.create({
         key: 'jump',
         // Usamos el frame 9 (o el 0) como pose estática

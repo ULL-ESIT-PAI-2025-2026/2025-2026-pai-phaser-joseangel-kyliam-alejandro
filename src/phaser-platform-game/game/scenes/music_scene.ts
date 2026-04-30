@@ -11,12 +11,12 @@
  * @desc Manages all sound effects and background music for the game.
  */
 
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 
-const SOUND_PATH: string = 'assets/sound/';
+const SOUND_PATH: string = '/2025-2026-pai-phaser-joseangel-kyliam-alejandro/assets/sound/';
 
 /** @classdesc Manages all audio assets and playback for the game. */
-export class MusicScene extends Phaser.Scene {
+export default class MusicScene extends Phaser.Scene {
   private static readonly BACKGROUND_VOLUME: number = 0.3;
 
   // In order to modify the background sound
