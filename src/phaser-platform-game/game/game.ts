@@ -13,7 +13,7 @@ export function StartGame(containerId: string) {
 
     parent: containerId,
 
-    backgroundColor: '#222',
+    backgroundColor: '#66CDAA',
 
     physics: {
       default: 'arcade',

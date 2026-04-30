@@ -24,6 +24,23 @@ export default class GameScene extends Phaser.Scene {
     super('GameScene');
   }
 
+  preload() {
+    const repoBase = '/2025-2026-pai-phaser-joseangel-kyliam-alejandro/';
+    this.load.image('coin-texture', `${repoBase}assets/img/coin.png`);
+    this.load.spritesheet('main-sprites', `${repoBase}assets/img/sprites.png`, {
+      frameWidth: 16,
+      frameHeight: 16,
+      endFrame: 2
+    });
+    this.load.spritesheet('player-sprite', `${repoBase}assets/img/player.png`, {
+    frameWidth: 24,
+    frameHeight: 30
+  });
+    this.load.on('filecomplete-spritesheet-main-sprites', () => {
+      console.log('✅ Spritesheet cargado con éxito usando la ruta base de Vite');
+    });
+  }
+
   create() {
     // 1. Lanzamos la Interfaz de Usuario en paralelo si no está activa
     if (!this.scene.isActive('UIScene')) {
@@ -44,8 +61,8 @@ export default class GameScene extends Phaser.Scene {
 
     // 3. Sistema de Pausa
     this.input.keyboard?.on('keydown-P', () => {
-      this.scene.pause(); // Congela físicas, updates y timers de esta escena
-      this.scene.launch('PauseScene'); // Lanza el menú de pausa por encima
+      this.scene.pause();
+      this.scene.launch('PauseScene');
     });
 
     // 4. Temporizador de la partida (se pausa automáticamente con this.scene.pause())
@@ -63,33 +80,23 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update() {
-    // Delegamos la lógica de movimiento al propio jugador
     if (this.player) {
       this.player.update();
     }
   }
 
   createCollisions() {
-    // Colisiones sólidas (con separación física)
     this.physics.add.collider(this.player, this.walls);
-
-    // La lava cayendo toca el suelo y desaparece en ese mismo frame (Overlap en vez de Collider)
     this.physics.add.overlap(this.lavaFallingGroup, this.walls, (lavaObj) => {
       const lava = lavaObj as LavaFalling;
       lava.deactivate(); 
     });
-
-    // Overlaps con objetos recolectables
     this.physics.add.overlap(this.player, this.coins, (_, coin) => {
       coin.destroy();
       gameState.addCoin(); 
     });
-
-    // Overlaps con peligros (Lava estática y la que cae)
     this.physics.add.overlap(this.player, this.lavaStatic, () => this.handleDeath());
     this.physics.add.overlap(this.player, this.lavaFallingGroup, () => this.handleDeath()); 
-
-    // Overlap con la salida
     this.physics.add.overlap(this.player, this.exits, () => this.handleLevelComplete());
   }
 
@@ -101,7 +108,7 @@ export default class GameScene extends Phaser.Scene {
       gameState.resetGame();
       this.scene.restart();
     } else {
-      this.scene.restart(); // Reinicia la escena actual, manteniendo las vidas/puntos
+      this.scene.restart();
     }
   }
 

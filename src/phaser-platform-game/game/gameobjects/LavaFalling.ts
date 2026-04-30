@@ -10,7 +10,7 @@ export default class LavaFalling extends Phaser.Physics.Arcade.Sprite {
   private readonly VELOCIDAD_CAIDA = 200;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, ''); 
+    super(scene, x, y, 'main-sprites', 1); 
 
     this.startX = x;
     this.startY = y;

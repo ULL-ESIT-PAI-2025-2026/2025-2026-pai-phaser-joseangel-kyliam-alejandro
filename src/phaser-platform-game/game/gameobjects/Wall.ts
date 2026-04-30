@@ -2,7 +2,7 @@ import * as Phaser from 'phaser';
 
 export default class Wall extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, '');
+    super(scene, x, y, 'main-sprites', 0);
 
     scene.add.existing(this);
     // El 'true' indica que es un cuerpo ESTÁTICO (no le afecta la gravedad ni se mueve)

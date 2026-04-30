@@ -15,7 +15,7 @@ import * as Phaser from 'phaser';
 
 export default class Coin extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, '');
+    super(scene, x, y, 'coin-texture', 0);
 
     scene.add.existing(this);
     // También la hacemos estática para ahorrar cálculos físicos
