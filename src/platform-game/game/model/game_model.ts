@@ -18,11 +18,8 @@ export type State = 'playing' | 'dead';
 /** @classdesc Manages the game state, current level, and level data. */
 class GameModel {
   private gameState: State = 'playing';
-  private levels: Level[] = GAME_LEVELS;
+  private readonly levels: Level[] = GAME_LEVELS;
   private currentLevel: number = 0;
-
-  /** @desc Creates a new GameModel instance. */
-  constructor() {}
 
   /**
    * @desc Returns the current level index.

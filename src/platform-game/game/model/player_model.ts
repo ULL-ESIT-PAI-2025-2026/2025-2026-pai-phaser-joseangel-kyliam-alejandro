@@ -16,9 +16,6 @@ class PlayerModel {
   private livesLeft: number = 0;
   private coins: number = 0;
 
-  /** @desc Creates a new PlayerModel instance. */
-  constructor() {}
-
   /**
    * @desc Returns the current number of coins collected.
    * @returns The coin count
@@ -26,6 +23,13 @@ class PlayerModel {
   getCoins(): number {
     return this.coins;
   }
+
+  /**
+   * @desc Increments the coin count
+   */
+  addCoin() {
+    ++this.coins;
+  } 
 
   /**
    * @desc Returns the number of lives remaining.
