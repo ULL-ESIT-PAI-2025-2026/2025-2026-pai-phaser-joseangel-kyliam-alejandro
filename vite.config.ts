@@ -25,7 +25,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         platformGame: resolve(__dirname, 'src/platform-game/platform-game.html'),
-        inputExample: resolve(__dirname, 'src/input-example/input-example.html'),
+        tutorial: resolve(__dirname, 'src/tutorial/tutorial.html'),
       },
     },
   },
