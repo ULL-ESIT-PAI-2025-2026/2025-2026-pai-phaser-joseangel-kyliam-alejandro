@@ -19,7 +19,7 @@ import * as Phaser from 'phaser';
  */
 export default class StartScene extends Phaser.Scene {
   /**
-   * @desc Instantiates the StartScene with its unique Phaser key.
+   * @desc Instantiates the StartScene with a UNIQUE key.
    */
   constructor() {
     super('StartScene');
@@ -44,7 +44,7 @@ export default class StartScene extends Phaser.Scene {
 
     this.add.text(400, 280, '--- FÍSICAS ---', {
       fontSize: '24px',
-      color: '#00ffff'
+      color: 'cyan'
     }).setOrigin(0.5);
 
     this.createNavigationButton(330, '3. Gravedad', 'Physics1');
@@ -63,7 +63,7 @@ export default class StartScene extends Phaser.Scene {
   private createNavigationButton(yPosition: number, buttonText: string, targetSceneName: string): void {
     const interactiveButton: Phaser.GameObjects.Text = this.add.text(400, yPosition, buttonText, {
       fontSize: '20px',
-      backgroundColor: '#000',
+      backgroundColor: 'black',
       padding: { x: 10, y: 5 }
     })
     .setOrigin(0.5)
