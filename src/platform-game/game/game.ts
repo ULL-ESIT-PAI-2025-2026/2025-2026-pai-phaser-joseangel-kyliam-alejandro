@@ -1,20 +1,30 @@
-/**
- * Universidad de La Laguna
- * Escuela Superior de Ingeniería y Tecnología
- * Grado en Ingeniería Informática
- * Programación de Aplicaciones Interactivas
- *
- * @author Jose Angel Portillo Garcia
- * @author Alejandro Feo Martin
- * @author Kyliam Gabriel Chinea Salcedo
- * @since Apr 29 2026
- * @desc Main module that starts the Phaser game instance.
- */
+import * as Phaser from 'phaser';
+import GameScene from './scenes/GameScene';
+import UIScene from './scenes/UIScene';
+import PauseScene from './scenes/PauseScene';
 
-/**
- * @desc Creates and launches the Phaser game inside the given DOM element.
- * @param element - The id or selector of the container element
- */
-export function StartGame(element: string) {
-  console.log('Game is starting...');
+export function StartGame(containerId: string) {
+
+  const config: Phaser.Types.Core.GameConfig = {
+    type: Phaser.AUTO,
+
+    width: 800,
+    height: 600,
+
+    parent: containerId,
+
+    backgroundColor: '#222',
+
+    physics: {
+      default: 'arcade',
+      arcade: {
+        gravity: { x: 0, y: 300 },
+        debug: true
+      }
+    },
+
+    scene: [GameScene, UIScene, PauseScene]
+  };
+
+  new Phaser.Game(config);
 }
