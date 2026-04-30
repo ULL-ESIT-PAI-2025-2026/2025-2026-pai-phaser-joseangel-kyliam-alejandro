@@ -8,7 +8,7 @@
  * @author Alejandro Feo Martin
  * @author Kyliam Gabriel Chinea Salcedo
  * @since Apr 29 2026
- * @desc Manages all sound effects and background music for the game.
+ * @desc Factory for constructing game levels from tilemap string data.
  */
 
 import * as Phaser from 'phaser';
@@ -19,44 +19,83 @@ import Lava from '../gameobjects/Lava';
 import Exit from '../gameobjects/Exit';
 import LavaFalling from '../gameobjects/LavaFalling';
 
+/**
+ * @classdesc Factory class for building game levels from tilemap data.
+ * Parses string-based level layouts and instantiates the appropriate game objects.
+ */
 export class LevelBuilder {
+  /**
+   * @desc Constructs a complete level from tilemap string data.
+   * Each character represents a different game object type.
+   * 
+   * @param scene - The Phaser scene where level objects are created.
+   * @param levelData - Array of strings representing the level tilemap.
+   * @returns An object containing all built level components (player, groups, etc).
+   * 
+   * @example
+   * levelData = [
+   *   '#####',
+   *   '#@o!#',
+   *   '#E V#',
+   *   '#####'
+   * ]
+   * // '@' = Player, '#' = Wall, 'o' = Coin, '!' = Lava, etc.
+   */
   static build(scene: Phaser.Scene, levelData: string[]) {
-    
-    const walls = scene.physics.add.staticGroup();
-    const coins = scene.physics.add.staticGroup();
-    const lavaStatic = scene.physics.add.staticGroup(); 
-    const exits = scene.physics.add.staticGroup();
-    
-    // NUEVO: Grupo DINÁMICO para la lava que cae
-    const lavaFallingGroup = scene.physics.add.group(); 
+    // Create physics groups for each object type
+    const wallGroup = scene.physics.add.staticGroup();
+    const coinGroup = scene.physics.add.staticGroup();
+    const staticLavaGroup = scene.physics.add.staticGroup(); 
+    const exitGroup = scene.physics.add.staticGroup();
+    const fallingLavaGroup = scene.physics.add.group(); 
 
-    let player!: Player;
+    let playerCharacter!: Player;
 
-    levelData.forEach((row, y) => {
-      [...row].forEach((char, x) => {
-        const px = x * 32 + 16;
-        const py = y * 32 + 16;
+    // Parse each character in the level data
+    levelData.forEach((rowString, rowIndex) => {
+      [...rowString].forEach((tileCharacter, columnIndex) => {
+        // Calculate pixel position (each tile is 32x32)
+        const pixelX = columnIndex * 32 + 16;
+        const pixelY = rowIndex * 32 + 16;
 
-        if (char === '@') player = new Player(scene, px, py);
-        else if (char === '#') walls.add(new Wall(scene, px, py));
-        else if (char === 'o') coins.add(new Coin(scene, px, py));
-        else if (char === '!') lavaStatic.add(new Lava(scene, px, py));
-        else if (char === 'E') exits.add(new Exit(scene, px, py));
-        else if (char === 'V') lavaFallingGroup.add(new LavaFalling(scene, px, py));
+        // Instantiate appropriate game object based on character
+        if (tileCharacter === '@') {
+          playerCharacter = new Player(scene, pixelX, pixelY);
+        } else if (tileCharacter === '#') {
+          wallGroup.add(new Wall(scene, pixelX, pixelY));
+        } else if (tileCharacter === 'o') {
+          coinGroup.add(new Coin(scene, pixelX, pixelY));
+        } else if (tileCharacter === '!') {
+          staticLavaGroup.add(new Lava(scene, pixelX, pixelY));
+        } else if (tileCharacter === 'E') {
+          exitGroup.add(new Exit(scene, pixelX, pixelY));
+        } else if (tileCharacter === 'V') {
+          fallingLavaGroup.add(new LavaFalling(scene, pixelX, pixelY));
+        }
       });
     });
 
-    const mapWidth = levelData[0].length * 32;
-    const mapHeight = levelData.length * 32;
+    // Calculate level boundaries
+    const mapWidthInPixels = levelData[0].length * 32;
+    const mapHeightInPixels = levelData.length * 32;
 
-    scene.physics.world.setBounds(0, 0, mapWidth, mapHeight);
+    // Set physics world boundaries
+    scene.physics.world.setBounds(0, 0, mapWidthInPixels, mapHeightInPixels);
     
-    if (player) {
-      scene.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
-      scene.cameras.main.startFollow(player, true, 0.08, 0.08);
+    // Configure camera to follow player
+    if (playerCharacter) {
+      scene.cameras.main.setBounds(0, 0, mapWidthInPixels, mapHeightInPixels);
+      scene.cameras.main.startFollow(playerCharacter, true, 0.08, 0.08);
     }
 
-    // Asegúrate de devolver todos los grupos a la escena
-    return { player, walls, coins, lavaStatic, lavaFallingGroup, exits };
+    // Return all constructed level components
+    return { 
+      player: playerCharacter, 
+      walls: wallGroup, 
+      coins: coinGroup, 
+      lavaStatic: staticLavaGroup, 
+      lavaFallingGroup: fallingLavaGroup, 
+      exits: exitGroup
+    };
   }
 }

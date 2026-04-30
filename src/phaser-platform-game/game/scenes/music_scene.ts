@@ -8,29 +8,40 @@
  * @author Alejandro Feo Martin
  * @author Kyliam Gabriel Chinea Salcedo
  * @since Apr 29 2026
- * @desc Manages all sound effects and background music for the game.
+ * @desc Manages all audio assets and playback including background music and sound effects.
  */
 
 import * as Phaser from 'phaser';
 
+/**
+ * @desc Base path for all sound asset files in the repository.
+ */
 const SOUND_PATH: string = '/2025-2026-pai-phaser-joseangel-kyliam-alejandro/assets/sound/';
 
-/** @classdesc Manages all audio assets and playback for the game. */
+/**
+ * @classdesc Audio manager scene that handles preloading, playback control,
+ * and muting of background music and sound effects throughout the game.
+ */
 export default class MusicScene extends Phaser.Scene {
+  /**
+   * @desc Volume level for background music (0.0 to 1.0 scale).
+   */
   private static readonly BACKGROUND_VOLUME: number = 0.3;
 
-  // In order to modify the background sound
+  /**
+   * @desc Reference to the looping background music audio object.
+   */
   private backgroundMusic?: Phaser.Sound.BaseSound;
 
   /**
-   * @desc Creates a new MusicScene instance.
+   * @desc Instantiates the MusicScene with its unique Phaser key identifier.
    */
   constructor() {
     super('MusicScene');
   }
 
   /**
-   * @desc Loads all sound assets into the audio cache.
+   * @desc Loads all sound assets into the audio cache from the file system.
    */
   preload(): void {
     this.load.audio('background', SOUND_PATH + '201-overworld-bgm.mp3');
@@ -44,14 +55,14 @@ export default class MusicScene extends Phaser.Scene {
   }
 
   /**
-   * @desc Starts playing background music when the scene is created.
+   * @desc Initializes the audio manager and starts background music playback.
    */
   create(): void {
     this.playBackgroundMusic();
   }
 
   /**
-   * @desc Starts or resumes the background music track.
+   * @desc Plays background music if not already playing, or resumes if paused.
    */
   playBackgroundMusic(): void {
     if (!this.backgroundMusic) {
@@ -78,91 +89,91 @@ export default class MusicScene extends Phaser.Scene {
   }
 
   /**
-   * @desc Plays the fireworks sound effect.
+   * @desc Plays the fireworks celebration sound effect.
    */
   playFireworksSound(): void {
     this.sound.play('fireworks');
   }
 
   /**
-   * @desc Plays the game over sound effect.
+   * @desc Plays the game over defeat sound effect.
    */
   playGameOverSound(): void {
     this.sound.play('gameOver');
   }
 
   /**
-   * @desc Plays the jump sound effect.
+   * @desc Plays the jump action sound effect.
    */
   playJumpSound(): void {
     this.sound.play('jump');
   }
 
   /**
-   * @desc Plays the death sound effect.
+   * @desc Plays the player death sound effect.
    */
   playDeathSound(): void {
     this.sound.play('death');
   }
 
   /**
-   * @desc Plays the stage clear jingle.
+   * @desc Plays the stage/level completion jingle.
    */
   playStageClearSound(): void {
     this.sound.play('stageClear');
   }
 
   /**
-   * @desc Plays the world clear jingle.
+   * @desc Plays the world/game completion victory jingle.
    */
   playWorldClearSound(): void {
     this.sound.play('worldClear');
   }
 
   /**
-   * @desc Pauses the background music.
+   * @desc Pauses background music playback without stopping it.
    */
   pauseBackgroundMusic(): void {
     this.backgroundMusic?.pause();
   }
 
   /**
-   * @desc Resumes the background music from pause.
+   * @desc Resumes background music from paused state.
    */
   resumeBackgroundMusic(): void {
     this.backgroundMusic?.resume();
   }
 
   /**
-   * @desc Stops the background music entirely.
+   * @desc Completely stops background music playback.
    */
   stopBackgroundMusic(): void {
     this.backgroundMusic?.stop();
   }
 
   /**
-   * @desc Mutes all sound output.
+   * @desc Mutes all sound and music output globally.
    */
   muteSounds(): void {
     this.sound.mute = true;
   }
 
   /**
-   * @desc Unmutes all sound output.
+   * @desc Unmutes all sound and music output globally.
    */
   unmuteSounds(): void {
     this.sound.mute = false;
   }
 
   /**
-   * @desc Toggles the mute state of all sounds.
+   * @desc Toggles the global mute state of all audio.
    */
   toggleMute(): void {
     this.sound.mute = !this.sound.mute;
   }
 
   /**
-   * @desc Creates the looping background music audio object.
+   * @desc Creates and configures the background music audio object for looping playback.
    */
   private createBackgroundMusic(): void {
     this.backgroundMusic = this.sound.add('background', {

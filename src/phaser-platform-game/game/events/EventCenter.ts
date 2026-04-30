@@ -8,11 +8,15 @@
  * @author Alejandro Feo Martin
  * @author Kyliam Gabriel Chinea Salcedo
  * @since Apr 29 2026
- * @desc Manages all sound effects and background music for the game.
+ * @desc Global event emitter for inter-scene communication and state updates.
  */
 
 import * as Phaser from 'phaser';
 
+/**
+ * @desc A global event emitter instance used for broadcasting state changes
+ * between independent scenes (GameScene and UIScene).
+ */
 const eventCenter = new Phaser.Events.EventEmitter();
 
 export default eventCenter;
