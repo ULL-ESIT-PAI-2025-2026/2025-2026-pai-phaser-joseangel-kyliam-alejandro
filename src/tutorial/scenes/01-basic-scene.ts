@@ -29,14 +29,10 @@ export default class SceneDimensions extends Phaser.Scene {
    */
   create(): void {
     const sceneInformation: string = '(0, 0)' + '\n' + 'Size: ';
-    const originMarker: Phaser.GameObjects.Text = this.add.text(0, 0, markerString) {
-      fontSize: '32px'
-    });
 
-     
-    const canvasSizeMarker: Phaser.GameObjects.Text = this.add.text(xLimit, yLimit, `(${xLimit}, 0)`, {
+    const centeredInformationMarker: Phaser.GameObjects.Text = this.add.text(0, 0, markerString) {
       fontSize: '32px'
     });
   }
 
-}
+}s
