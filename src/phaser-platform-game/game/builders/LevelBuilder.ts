@@ -17,7 +17,7 @@ import Wall from '../gameobjects/Wall';
 import Coin from '../gameobjects/Coin';
 import Lava from '../gameobjects/Lava';
 import Exit from '../gameobjects/Exit';
-import LavaFalling from '../gameobjects/LavaFalling'; // <--- Añadido
+import LavaFalling from '../gameobjects/LavaFalling';
 
 export class LevelBuilder {
   static build(scene: Phaser.Scene, levelData: string[]) {
@@ -42,7 +42,7 @@ export class LevelBuilder {
         else if (char === 'o') coins.add(new Coin(scene, px, py));
         else if (char === '!') lavaStatic.add(new Lava(scene, px, py));
         else if (char === 'E') exits.add(new Exit(scene, px, py));
-        else if (char === 'V') lavaFallingGroup.add(new LavaFalling(scene, px, py)); // <--- Añadido
+        else if (char === 'V') lavaFallingGroup.add(new LavaFalling(scene, px, py));
       });
     });
 
